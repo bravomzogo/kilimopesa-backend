@@ -13,7 +13,7 @@ const HudumaZaKilimo = () => {
   useEffect(() => {
     const pataHuduma = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/services/');
+        const response = await axios.get('https://nyangi-market.onrender.com/api/services/');
         setHuduma(response.data);
       } catch (err) {
         setKosa('Imeshindikana kupata huduma. Tafadhali jaribu tena baadaye.');
@@ -132,7 +132,7 @@ const HudumaZaKilimo = () => {
                 <div className="relative">
                   {huduma.image && (
                     <img
-                      src={`http://localhost:8000${huduma.image}`}
+                      src={`https://nyangi-market.onrender.com${huduma.image}`}
                       alt={huduma.title}
                       className="w-full h-60 object-cover"
                       onError={(e) => {

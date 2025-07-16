@@ -16,7 +16,7 @@ const OrodhaYaArdhi = () => {
   useEffect(() => {
     const pataArdhi = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/land/');
+        const response = await axios.get('https://nyangi-market.onrender.com/api/land/');
         setArdhi(response.data);
       } catch (err) {
         setKosa('Imeshindikana kupata orodha ya ardhi. Tafadhali jaribu tena baadaye.');
@@ -200,7 +200,7 @@ const OrodhaYaArdhi = () => {
                 <div className="relative group">
                   {ardhi.image && (
                     <img
-                      src={`http://localhost:8000${ardhi.image}`}
+                      src={`https://nyangi-market.onrender.com${ardhi.image}`}
                       alt={ardhi.title}
                       className="w-full h-56 object-cover rounded-t-xl transition duration-300 group-hover:scale-105"
                       onError={(e) => {
@@ -271,7 +271,7 @@ const OrodhaYaArdhi = () => {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">{selectedArdhi.title}</h2>
               {selectedArdhi.image && (
                 <img
-                  src={`http://localhost:8000${selectedArdhi.image}`}
+                  src={`https://nyangi-market.onrender.com${selectedArdhi.image}`}
                   alt={selectedArdhi.title}
                   className="w-full h-48 object-cover rounded-lg mb-4"
                   onError={(e) => {

@@ -14,7 +14,7 @@ const OrodhaYaVideo = () => {
   useEffect(() => {
     const pataVideo = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/videos/');
+        const response = await axios.get('https://nyangi-market.onrender.com/api/videos/');
         setVideo(response.data);
       } catch (err) {
         setKosa('Imeshindikana kupata video. Tafadhali jaribu tena baadaye.');
@@ -30,7 +30,7 @@ const OrodhaYaVideo = () => {
   const handleSearch = async () => {
     setInapakia(true);
     try {
-      const response = await axios.get(`http://localhost:8000/api/videos/youtube_search/?q=${searchQuery}`);
+      const response = await axios.get(`https://nyangi-market.onrender.com/api/videos/youtube_search/?q=${searchQuery}`);
       setVideo(
         response.data.items.map(item => ({
           id: item.id.videoId,
