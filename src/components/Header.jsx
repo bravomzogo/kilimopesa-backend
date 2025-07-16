@@ -25,11 +25,11 @@ const Header = () => {
 
   const navLinks = [
     { path: '/', name: 'Nyumbani' },
-    { path: '/products', name: 'Bidhaa' },
-    { path: '/land', name: 'Ardhi' },
-    { path: '/inputs', name: 'Pembejeo' },
-    { path: '/services', name: 'Huduma' },
-    { path: '/videos', name: 'Mafunzo' },
+    { path: 'api/products', name: 'Bidhaa' },
+    { path: '/api/land', name: 'Ardhi' },
+    { path: 'api/inputs', name: 'Pembejeo' },
+    { path: 'api/services', name: 'Huduma' },
+    { path: 'api/videos', name: 'Mafunzo' },
   ];
 
   const handleSearch = (e) => {
