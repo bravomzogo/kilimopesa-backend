@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX, FiShoppingCart, FiUser, FiSearch } from 'react-icons/fi';
+import { FiMenu, FiX } from 'react-icons/fi';
 import { FaLeaf } from 'react-icons/fa';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
 
   // Determine if current page has light background
@@ -29,14 +27,8 @@ const Header = () => {
     { path: '/land', name: 'Ardhi' },
     { path: '/inputs', name: 'Pembejeo' },
     { path: '/services', name: 'Huduma' },
-    { path: '/videos', name: 'Mafunzo' },
+    { path: '/videos', name: 'Kilimo TV' },
   ];
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    setSearchOpen(false);
-  };
 
   // Header background and text colors based on state
   const headerBg = scrolled || isLightPage ? 'bg-white' : 'bg-transparent';
@@ -46,8 +38,6 @@ const Header = () => {
   const logoIcon = scrolled || isLightPage ? 'text-white' : 'text-green-600';
   const navHover = scrolled || isLightPage ? 'hover:text-green-600' : 'hover:text-green-200';
   const activeNav = scrolled || isLightPage ? 'text-green-600' : 'text-white';
-  const iconBg = scrolled || isLightPage ? 'bg-gray-100' : 'bg-white bg-opacity-20';
-  const iconColor = scrolled || isLightPage ? 'text-gray-700' : 'text-white';
   const mobileMenuBg = scrolled || isLightPage ? 'bg-white' : 'bg-green-700';
 
   return (
@@ -95,38 +85,6 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setSearchOpen(true)}
-              className={`p-2 rounded-full ${iconBg} ${iconColor}`}
-              aria-label="Search"
-            >
-              <FiSearch className="text-xl" />
-            </motion.button>
-
-            <motion.button 
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className={`p-2 rounded-full relative ${iconBg} ${iconColor}`}
-              aria-label="Cart"
-            >
-              <FiShoppingCart className="text-xl" />
-              <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className={`p-2 rounded-full ${iconBg} ${iconColor}`}
-              aria-label="Account"
-            >
-              <FiUser className="text-xl" />
-            </motion.button>
-          </div>
-
           {/* Mobile Menu Button */}
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -142,40 +100,6 @@ const Header = () => {
             )}
           </motion.button>
         </div>
-
-        {/* Search Modal */}
-        <AnimatePresence>
-          {searchOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-white bg-opacity-95 z-50 flex items-center justify-center p-4"
-            >
-              <div className="w-full max-w-2xl relative">
-                <form onSubmit={handleSearch} className="relative">
-                  <input
-                    type="text"
-                    placeholder="Tafuta bidhaa, ardhi, nk..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full py-4 pl-16 pr-4 rounded-full bg-gray-100 text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                    autoFocus
-                  />
-                  <FiSearch className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl" />
-                </form>
-                <button
-                  onClick={() => setSearchOpen(false)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  aria-label="Close search"
-                >
-                  <FiX className="text-2xl" />
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Mobile Menu */}
         <AnimatePresence>
@@ -208,21 +132,6 @@ const Header = () => {
                   </motion.div>
                 ))}
               </nav>
-
-              <div className="flex justify-center space-x-4 p-4 border-t border-gray-200">
-                <button className={`p-3 rounded-full ${scrolled || isLightPage ? 'bg-gray-100 text-gray-700' : 'bg-green-600 text-white'}`}>
-                  <FiShoppingCart className="text-xl" />
-                </button>
-                <button className={`p-3 rounded-full ${scrolled || isLightPage ? 'bg-gray-100 text-gray-700' : 'bg-green-600 text-white'}`}>
-                  <FiUser className="text-xl" />
-                </button>
-                <button 
-                  onClick={() => setSearchOpen(true)}
-                  className={`p-3 rounded-full ${scrolled || isLightPage ? 'bg-gray-100 text-gray-700' : 'bg-green-600 text-white'}`}
-                >
-                  <FiSearch className="text-xl" />
-                </button>
-              </div>
             </motion.div>
           )}
         </AnimatePresence>
