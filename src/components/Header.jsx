@@ -62,12 +62,12 @@ const Header = () => {
             {navLinks.map((link) => (
               <motion.div
                 key={link.path}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 1.7 }}
               >
                 <Link
                   to={link.path}
-                  className={`relative px-3 py-2 font-medium transition-colors ${location.pathname === link.path 
+                  className={`relative px-5 py-2 font-medium transition-colors ${location.pathname === link.path 
                     ? activeNav 
                     : `${textColor} ${navHover}`}`}
                 >
@@ -75,7 +75,7 @@ const Header = () => {
                   {location.pathname === link.path && (
                     <motion.span
                       layoutId="underline"
-                      className="absolute left-1/2 bottom-0 block h-1 w-6 -translate-x-1/2 bg-green-400 rounded-full"
+                      className="absolute left-9 bottom-0 block h-1 w-6 -translate-x-1/2 bg-green-400 rounded-full"
                       initial={false}
                       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     />
