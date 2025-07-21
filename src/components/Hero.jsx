@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight, FaPlayCircle, FaTimes, FaCheck, FaSpinner } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -29,6 +29,8 @@ const Hero = () => {
     code: ''
   });
 
+  const navigate = useNavigate();
+
   const handleRegisterChange = (e) => {
     const { name, value } = e.target;
     setRegisterData(prev => ({
@@ -55,16 +57,21 @@ const Hero = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (registerData.password !== registerData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
     setIsLoading(true);
+    
     try {
-      // Register API call
       const response = await axios.post('/api/register/', {
         username: registerData.username,
         email: registerData.email,
         password: registerData.password
+      }, {
+        withCredentials: true
       });
       
-      // Show verification modal with the registered email
       setVerificationData({
         email: registerData.email,
         code: ''
@@ -83,18 +90,18 @@ const Hero = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    
     try {
-      // Login API call
       const response = await axios.post('/api/login/', {
         email: loginData.email,
         password: loginData.password
+      }, {
+        withCredentials: true
       });
       
-      // Handle successful login (store token, redirect, etc.)
-      localStorage.setItem('token', response.data.token);
       setShowLoginModal(false);
       toast.success('Login successful');
-      // You might want to redirect or update global state here
+      navigate('/dashboard'); // Redirect to dashboard or home page
     } catch (error) {
       console.error('Login error:', error);
       toast.error(error.response?.data?.error || 'Login failed');
@@ -106,13 +113,15 @@ const Hero = () => {
   const handleVerify = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    
     try {
-      // Verify email API call
-      const response = await axios.post('/api/verify-email/', verificationData);
+      const response = await axios.post('/api/verify-email/', verificationData, {
+        withCredentials: true
+      });
       
       setShowVerificationModal(false);
       toast.success('Email verified successfully!');
-      // You might want to automatically log the user in here
+      navigate('/dashboard'); // Redirect to dashboard or home page
     } catch (error) {
       console.error('Verification error:', error);
       toast.error(error.response?.data?.error || 'Verification failed');
@@ -121,9 +130,22 @@ const Hero = () => {
     }
   };
 
+  const handleResendVerification = async () => {
+    setIsLoading(true);
+    try {
+      await axios.post('/api/resend-verification/', { email: verificationData.email }, {
+        withCredentials: true
+      });
+      toast.success('Verification code resent successfully');
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Failed to resend verification code');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <section className="relative bg-green-50 overflow-hidden">
-      {/* Hero content */}
       <div className="relative h-screen max-h-[800px]">
         <div 
           className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center"
@@ -388,7 +410,14 @@ const Hero = () => {
                 Tumepeleka nambari ya uthibitisho kwenye barua pepe: <span className="font-semibold">{verificationData.email}</span>
               </p>
               <p className="text-gray-600 text-sm">
-                Ikiwa haujaipokea, angalia kwenye spam au bonyeza <button className="text-green-600 hover:underline">hapa</button> kutuma tena.
+                Ikiwa haujaipokea, angalia kwenye spam au{' '}
+                <button 
+                  onClick={handleResendVerification}
+                  className="text-green-600 hover:underline"
+                  disabled={isLoading}
+                >
+                  bonyeza hapa
+                </button> kutuma tena.
               </p>
             </div>
             

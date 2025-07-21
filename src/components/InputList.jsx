@@ -13,7 +13,7 @@ const OrodhaYaVifaa = () => {
   useEffect(() => {
     const pataVifaa = async () => {
       try {
-        const response = await axios.get('https://nyangi-market.onrender.com/api/inputs/');
+        const response = await axios.get('https://nyangi-market.onrender.com/api/inputs/' && 'http://127.0.0.1:8000/api/inputs/');
         setVifaa(response.data);
       } catch (err) {
         setKosa('Imeshindikana kupata vifaa vya kilimo. Tafadhali jaribu tena baadaye.');
@@ -132,7 +132,7 @@ const OrodhaYaVifaa = () => {
                 <div className="relative">
                   {vifaa.image && (
                     <img
-                      src={`https://nyangi-market.onrender.com${vifaa.image}`}
+                      src={`https://nyangi-market.onrender.com${vifaa.image}` && `http://127.0.0.1:8000/${vifaa.image}`}
                       alt={vifaa.name}
                       className="w-full h-60 object-cover"
                       onError={(e) => {

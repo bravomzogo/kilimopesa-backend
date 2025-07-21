@@ -15,7 +15,7 @@ const OrodhaYaBidhaa = () => {
   useEffect(() => {
     const pataBidhaa = async () => {
       try {
-        const response = await axios.get('https://nyangi-market.onrender.com/api/products/');
+        const response = await axios.get('https://nyangi-market.onrender.com/api/products/' && 'http://127.0.0.1:8000/api/products/');
         setBidhaa(response.data);
       } catch (err) {
         setKosa('Imeshindikana kupata bidhaa. Tafadhali jaribu tena baadaye.');
@@ -173,7 +173,7 @@ const OrodhaYaBidhaa = () => {
                 <div className="relative group">
                   {bidhaa.image && (
                     <img
-                      src={`https://nyangi-market.onrender.com${bidhaa.image}`}
+                      src={`https://nyangi-market.onrender.com${bidhaa.image}` && `http://127.0.0.1:8000/${bidhaa.image}`}
                       alt={bidhaa.name}
                       className="w-full h-60 object-cover rounded-t-xl transition duration-300 group-hover:scale-105"
                       onError={(e) => {
@@ -243,7 +243,7 @@ const OrodhaYaBidhaa = () => {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">{selectedBidhaa.name}</h2>
               {selectedBidhaa.image && (
                 <img
-                  src={`https://nyangi-market.onrender.com${selectedBidhaa.image}`}
+                  src={`https://nyangi-market.onrender.com${selectedBidhaa.image}` && `http://127.0.0.1:8000/${selectedBidhaa.image}`}
                   alt={selectedBidhaa.name}
                   className="w-full h-48 object-cover rounded-lg mb-4"
                   onError={(e) => {
