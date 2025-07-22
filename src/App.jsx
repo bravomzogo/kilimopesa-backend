@@ -8,6 +8,7 @@ import LandList from './components/LandList';
 import InputList from './components/InputList';
 import ServiceList from './components/ServiceList';
 import VideoList from './components/VideoList';
+import Dashboard from './components/Dashboard'; // Placeholder for dashboard component
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/inputs" element={<InputList />} />
         <Route path="/services" element={<ServiceList />} />
         <Route path="/videos" element={<VideoList />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
     </Router>
