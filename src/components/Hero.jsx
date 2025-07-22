@@ -93,39 +93,39 @@ const Hero = () => {
     }
   };
 
-  // src/components/Hero.jsx (partial, replace handleLogin)
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-  
-  try {
-    const response = await axios.post('/api/login/', {
-      email: loginData.email,
-      password: loginData.password
-    }, {
-      withCredentials: true
-    });
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
     
-    setShowLoginModal(false);
-    toast.success('Login successful');
-    navigate('/dashboard');
-  } catch (error) {
-    console.error('Login error:', error);
-    let errorMessage = error.response?.data?.error || 'Login failed. Please check your credentials.';
-    if (error.response?.status === 403) {
-      errorMessage = error.response?.data?.error === 'Invalid CSRF token' 
-        ? 'CSRF token error. Please refresh the page and try again.'
-        : 'Please verify your email.';
-    } else if (error.response?.status === 401) {
-      errorMessage = 'Invalid email or password.';
-    } else if (error.request) {
-      errorMessage = 'No response from server. Check if the backend is running.';
+    try {
+      const response = await axios.post('/api/login/', {
+        email: loginData.email,
+        password: loginData.password
+      }, {
+        withCredentials: true
+      });
+      
+      setShowLoginModal(false);
+      toast.success('Login successful');
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+      let errorMessage = error.response?.data?.error || 'Login failed. Please check your credentials.';
+      if (error.response?.status === 403) {
+        errorMessage = error.response?.data?.error === 'Invalid CSRF token' 
+          ? 'CSRF token error. Please refresh the page and try again.'
+          : 'Please verify your email.';
+      } else if (error.response?.status === 401) {
+        errorMessage = 'Invalid email or password.';
+      } else if (error.request) {
+        errorMessage = 'No response from server. Check if the backend is running.';
+      }
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
-    toast.error(errorMessage);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
+
   const handleVerify = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -216,16 +216,6 @@ const handleLogin = async (e) => {
                 aria-label="Watch demo"
               >
                 <FaPlayCircle className="text-xl" /> Kilimopesa ni nini?
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setShowLoginModal(true)}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg shadow-lg flex items-center gap-2 transition-colors duration-300"
-                aria-label="Login"
-              >
-                Ingia
               </motion.button>
             </div>
           </motion.div>

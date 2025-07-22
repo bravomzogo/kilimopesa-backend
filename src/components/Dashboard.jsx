@@ -3,7 +3,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
-import { FaSignOutAlt, FaPlus, FaTractor, FaSeedling, FaTools, FaServicestack, FaVideo } from 'react-icons/fa';
+import { FaSignOutAlt, FaPlus, FaTractor, FaSeedling, FaTools, FaServicestack, FaVideo, FaSpinner } from 'react-icons/fa';
+
+// Set Axios base URL and default credentials
+axios.defaults.baseURL = 'https://nyangi-market.onrender.com';
+axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -13,7 +17,22 @@ const Dashboard = () => {
   const [services, setServices] = useState([]);
   const [videos, setVideos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [csrfToken, setCsrfToken] = useState('');
   const navigate = useNavigate();
+
+  // Fetch CSRF token on component mount
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get('/api/csrf/');
+        setCsrfToken(response.data.csrfToken);
+      } catch (error) {
+        console.error('Error fetching CSRF token:', error);
+        toast.error('Failed to initialize request. Please try again.');
+      }
+    };
+    fetchCsrfToken();
+  }, []);
 
   // Fetch user data and resources on mount
   useEffect(() => {
@@ -40,10 +59,14 @@ const Dashboard = () => {
         setVideos(videosResponse.data.filter(item => item.user === userResponse.data.username));
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error(error.response?.data?.error || 'Failed to load dashboard data');
+        let errorMessage = error.response?.data?.error || 'Failed to load dashboard data';
         if (error.response?.status === 401 || error.response?.status === 403) {
-          navigate('/'); // Redirect to login if unauthorized
+          errorMessage = 'Session expired or invalid. Please log in again.';
+          navigate('/');
+        } else if (error.request) {
+          errorMessage = 'No response from server. Check if the backend is running.';
         }
+        toast.error(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -56,12 +79,19 @@ const Dashboard = () => {
   const handleLogout = async () => {
     setIsLoading(true);
     try {
-      await axios.post('/api/logout/', {}, { withCredentials: true });
+      await axios.post('/api/logout/', {}, {
+        headers: { 'X-CSRFToken': csrfToken },
+        withCredentials: true
+      });
       toast.success('Logged out successfully');
       navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
-      toast.error(error.response?.data?.error || 'Logout failed');
+      let errorMessage = error.response?.data?.error || 'Logout failed';
+      if (error.response?.status === 403) {
+        errorMessage = 'Invalid CSRF token. Please try again.';
+      }
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +125,7 @@ const Dashboard = () => {
           <button
             onClick={handleLogout}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-            disabled={isLoading}
+            disabled={isLoading || !csrfToken}
           >
             <FaSignOutAlt /> Logout
           </button>
